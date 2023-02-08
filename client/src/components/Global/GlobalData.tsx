@@ -1,9 +1,25 @@
-import React from 'react'
+import React, { createContext, PropsWithChildren, useState } from "react";
 
-const GlobalData = () => {
-  return (
-    <div>GlobalData</div>
-  )
+
+interface userProps {
+  userData : null;
+  setUserData :  React.Dispatch<React.SetStateAction<null>>
 }
 
-export default GlobalData
+export const GlobalContext = createContext<userProps | null>(null)
+
+
+export const MainContext:React.FC<PropsWithChildren> = ({children}) =>{
+const [userData  , setUserData] = useState(null)
+
+
+return (
+  <GlobalContext.Provider value={{
+    
+    userData,
+    setUserData
+  }}>
+    {children}
+  </GlobalContext.Provider>
+)
+}

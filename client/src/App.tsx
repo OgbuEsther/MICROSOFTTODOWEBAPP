@@ -5,6 +5,7 @@ import SignUp from './components/Auth/SignUp';
 import SignIn from './components/Auth/SignIn';
 import Allroutes from './components/Routes/All.routes';
 import Header from './components/Header/Header';
+import Details from './components/Details/Details';
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
       </header> */}
       <Header />
       <Allroutes />
-    
+    {/* <Details /> */}
     </div>
   );
 }

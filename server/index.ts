@@ -2,7 +2,7 @@ import express, { Application } from "express"
 import appConfig from "./app"
 import { dbConfig } from "./Config/db"
 
-const port = 6000
+const port:number = 4000
 
 const app :Application = express()
 appConfig(app)
