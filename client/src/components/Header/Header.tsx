@@ -82,9 +82,7 @@ const Icons = styled.div`
 
 
 const IconHold = styled.div`
-/* width: 300px; */
-/* height: 30px; */
-/* background-color: orangered; */
+
 margin-right: 20px;
 	display: flex;
 	align-items: center;
@@ -172,6 +170,6 @@ z-index: 9999;
 `
 
 const Container = styled.div`
-/* position: fixed; */
+
 position: relative;
 `

@@ -1,11 +1,69 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components';
-import {MdOutlineWbSunny} from "react-icons/md"
 import {AiOutlineStar} from "react-icons/ai"
 import {BiCalendar} from "react-icons/bi"
 import {FiHome} from "react-icons/fi"
+import Swal from 'sweetalert2';
+import { GlobalContext } from '../Global/GlobalData';
+import axios from 'axios';
+
+type TaskData = {
+	_id: string;
+	status: boolean;
+	remainder: string;
+	date: string;
+	title: string;
+	note: string;
+};
+
+interface User {
+	name: string;
+	email: string;
+	_id: string;
+	task: TaskData[];
+	myDay: TaskData[];
+}
+
+
+
 const Tasks = () => {
- 
+	const { userData } = useContext(GlobalContext)
+	const [currentUser , setCurrentUser] = useState<User>({} as User )
+	const [title, setTitle] = useState("")
+	const [date , setDate] = useState(new Date().toDateString())
+
+
+	const addTask = async () => {
+		await axios.post(`http://localhost:4000/api/task/newtask/${userData?._id}`, {
+			title,
+			date
+		}).then((res) => {
+		
+			 Swal.fire({
+            icon: "success",
+            title: "Successfully added a task",
+        
+				 timer: 3000,
+			
+			 });
+			window.location.reload()
+		})
+	}
+
+
+	const getUserId = async () => {
+		await axios.get(`http://localhost:4000/api/getOne/${userData?._id}`).then((res) => {
+		
+			setCurrentUser(res.data.data)
+		})
+	}
+
+
+
+	useEffect(() => {
+	getUserId()
+} , [userData])
+
 	return (
 		<>
 			<Container>
@@ -27,7 +85,9 @@ const Tasks = () => {
 					<InputHold>
 						<Input2 type='radio' />
 						<Input
-						
+							onChange={(e) => {
+								setTitle(e.target.value)
+						}}
 							placeholder='Add Task'
 						/>
 					</InputHold>
@@ -35,13 +95,15 @@ const Tasks = () => {
 						<First>
 							<BiCalendar />
 						</First>
-						
-							<Button >Add</Button>
-					
+						{
+							title !== "" ?
+							<Button onClick={addTask} >Add</Button>
+					 : 
 							<Button disabled style={{ cursor: "not-allowed" }}>
 								Add
 							</Button>
 					
+						}
 
 					
 							<DatePicker>
@@ -50,22 +112,25 @@ const Tasks = () => {
 				
 					</Down>
 					<br />
-				
+					{
+						currentUser?.task?.map((props) => (
+								
 						<InputHold2>
 							<Hol>
 								<Input2
-									checked
+									
 								
 									type='radio'
 								/>
 								<TitleHold>
 									<Title>
-									
+									{props.title}
 									</Title>
 									<Sub>
 										<BiCalendar/>
-										{/* {props.date} */}
-										Due 
+										
+											Due :
+											{props.date}
 									</Sub>
 								</TitleHold>
 							</Hol>
@@ -75,6 +140,8 @@ const Tasks = () => {
 							</span>
 
 						</InputHold2>
+						))
+			}
 			
 				</Cont>
 			</Container>
@@ -206,7 +273,7 @@ const Cont = styled.div`
 	padding-left: 100px;
 	flex-direction: column;
 	margin-top: 70px;
-	/* background-color: red; */
+
 	flex: 1;
 `;
 const Hold = styled.div`
@@ -224,15 +291,14 @@ const Hold = styled.div`
 
 const Container = styled.div`
 	min-width: calc(100vw - 230px);
-	min-height: calc(100vh - 50px);
+	min-height: calc(100vh);
 
 	display: flex;
 	overflow: hidden;
 	justify-content: space-between;
 	align-items: center;
 	flex-direction: column;
-	background-color: #faf9f8;
+background-color: #f0f8ff1c;
     margin-left: 230px;
 
-	/* flex-direction: column; */
 `;

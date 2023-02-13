@@ -9,7 +9,8 @@ const SignIn = () => {
 
   const navigate = useNavigate();
 
-  const login = async () => {
+  const login = async (e:any) => {
+    e.preventDefault()
     await axios
       .post(`http://localhost:4000/api/signin`, { email })
       .then((res: any) => {
